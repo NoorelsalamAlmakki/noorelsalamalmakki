@@ -6,13 +6,30 @@ jobs:
   ls_linting:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ls-lint/action@v2.2.3
+      - name: Check out code
+        uses: actions/checkout@v4
+      
+      - name: List files
+        run: ls -la  # This will list all files, including hidden ones
+
+      - name: Display Current Directory
+        run: pwd  # This shows the current working directory
+
+      - name: Run Lint
+        uses: ls-lint/action@v2.2.3
+        with:
+          config: .ls-lint.yml  # Ensure this points to the correct path
+          workdir: .
+          warn: false
+          debug: false
 
   md_linting:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v18
+      - name: Check out code
+        uses: actions/checkout@v4
+      
+      - name: Run Markdown Lint
+        uses: DavidAnson/markdownlint-cli2-action@v18
         with:
           globs: '**/*.md'
