@@ -17,6 +17,20 @@ nav a.on{background:var(--bg);color:#000;border-color:var(--line)}
 main{max-width:1320px;margin:0 auto;padding:16px}
 .tab{display:none}.tab.on{display:block}
 .grid{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);gap:16px;align-items:start}
+/* desktop: visuals and sliders share one screen; the slider column scrolls on its own */
+@media(min-width:901px){
+ main{padding:10px 16px}
+ .grid{height:calc(100vh - var(--hdr,112px) - 20px);min-height:430px;align-items:stretch}
+ .grid>.card{min-height:0;display:flex;flex-direction:column}
+ .grid>.card:first-child{overflow:hidden}
+ .grid>.card:last-child{overflow-y:auto;overscroll-behavior:contain}
+ .grid>.card:first-child .three{flex:1.3 1 0;height:auto;min-height:160px}
+ .grid>.card:first-child canvas.plot{flex:1 1 0;height:auto;min-height:110px}
+ .grid>.card:first-child canvas.plot.tall{flex:1.5 1 0}
+ .grid>.card:first-child .legend{flex:none}
+ .grid>.card:last-child .lead{font-size:14px;margin-bottom:6px}
+ .grid>.card:last-child .ctl{margin:6px 0}
+}
 @media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.three{height:320px}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
 h2{font-family:Cambria,Caladea,Georgia,serif;font-size:20px;margin:0 0 4px;color:#000}
@@ -1503,8 +1517,9 @@ function show(){let t=(location.hash||'').slice(1);if(!mods[t])t='rock';
   document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('on',s.id==='tab-'+t));
   document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.t===t));
   if(!done[t]){done[t]=1;mods[t].init();}else mods[t].resize();}
+function fitHdr(){document.documentElement.style.setProperty('--hdr',document.querySelector('header').offsetHeight+'px');}fitHdr();
 window.addEventListener('hashchange',show);
-let rz=0;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(show,120);});
+let rz=0;window.addEventListener('resize',()=>{fitHdr();clearTimeout(rz);rz=setTimeout(show,120);});
 show();
 </script>
 </body>
